@@ -1,11 +1,11 @@
 export class ConfigurationThreshold {
-  name_bangla: number;
-  name_english: number;
-  image: number;
+  nameBn: number;
+  nameEn: number;
+  photo: number;
   signature: number;
-  fathers_name: number;
-  mothers_name: number;
-  DOB: number; //DOB -> Date of Birth
-  NID_NO: number;
+  fathersNameBn: number;
+  mothersNameBn: number;
+  dateOfBirth: number;
+  nidNumber: number;
   address: number;
 }
