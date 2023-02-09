@@ -10,19 +10,19 @@ export class UpdateConfigurationThresholdRequestDto
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
-  name_bangla: number;
+  nameBn: number;
 
   @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
-  name_english: number;
+  nameEn: number;
 
   @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
-  image: number;
+  photo: number;
 
   @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
@@ -34,25 +34,25 @@ export class UpdateConfigurationThresholdRequestDto
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
-  fathers_name: number;
+  fathersNameBn: number;
 
   @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
-  mothers_name: number;
+  mothersNameBn: number;
 
   @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
-  DOB: number;
+  dateOfBirth: number;
 
   @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
-  NID_NO: number;
+  nidNumber: number;
 
   @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
