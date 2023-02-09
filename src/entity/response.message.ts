@@ -34,3 +34,7 @@ export const enum ConfigurationThresholdErrorMessages {
   CANNOT_UPDATE_CONFIGURATION_THRESHOLD = 'Cannot update configuration threshold values',
   CANNOT_FIND_CONFIGURATION_THRESHOLD = 'Cannot find configuration threshold values',
 }
+
+export const enum NIDValidatorErrorMessages {
+  UNSUPPORTED_FILE = 'Unsupported File',
+}

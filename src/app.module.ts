@@ -4,6 +4,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { APIResponseModule } from './internal/api-response/api-response.module';
 import { ConfigurationModule } from './modules/configuration/configuration.module';
+import { NIDModule } from './modules/nid/nid.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { ConfigurationModule } from './modules/configuration/configuration.modul
     UserModule,
     APIResponseModule,
     ConfigurationModule,
+    NIDModule,
   ],
 })
 export class AppModule {}
