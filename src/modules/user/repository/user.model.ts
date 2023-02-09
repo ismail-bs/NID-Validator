@@ -22,10 +22,6 @@ const UserSchema = new Schema<User>(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      default: null,
-    },
     role: {
       type: String,
       enum: Role,

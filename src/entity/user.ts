@@ -10,14 +10,12 @@ export class User {
   name: string;
   password: string;
   role: Role;
-  image: string;
   resetPasswordToken?: string;
   resetPasswordExpires?: number;
 }
 
 export class UpdateUserRequest {
-  image?: string;
-  name?: string;
+  name: string;
 }
 
 export class Token {

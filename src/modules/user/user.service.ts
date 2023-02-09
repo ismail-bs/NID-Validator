@@ -27,9 +27,7 @@ export class UserService {
     userId: string,
     data: UpdateUserRequest,
   ): Promise<IResponse<User>> {
-    const updatedUser =
-      (data.image || data.name) &&
-      (await this.userRepo.updateUser(userId, data));
+    const updatedUser = await this.userRepo.updateUser(userId, data);
     if (!updatedUser)
       throw new APIException(
         UserErrorMessages.CANNOT_UPDATE_USER,

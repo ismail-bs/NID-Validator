@@ -16,7 +16,4 @@ export class UserDto implements User {
 
   @ApiProperty({ enum: Role })
   role: Role;
-
-  @ApiProperty()
-  image: string;
 }

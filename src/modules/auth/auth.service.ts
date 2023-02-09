@@ -111,6 +111,7 @@ export class AuthService {
 
   async superAdminLogin(): Promise<IResponse<Token>> {
     try {
+      // TODO: implement login logic for super admin.
       const payload = {
         role: Role.SUPER_ADMIN,
         logInTime: Date.now(),
