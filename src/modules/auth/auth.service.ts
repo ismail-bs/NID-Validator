@@ -20,6 +20,7 @@ import {
   IResponse,
 } from 'src/internal/api-response/api-response.service';
 import { APIException } from 'src/internal/exception/api.exception';
+import { coreConfig } from 'config/core';
 const ONE_HOUR_IN_MILLI_SEC = 3600000; // 1 hour = 3600000 milliseconds
 
 @Injectable()
@@ -148,7 +149,8 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
 
-    const resetUrl = baseUrl + '/reset-password/' + token;
+    const resetUrl =
+      baseUrl + '/' + coreConfig.restApiPrefix + '/reset-password/' + token;
 
     try {
       //TODO: add a proper email template & format
