@@ -9,13 +9,13 @@ import { UpdateConfigurationThresholdRequestDto } from './dto';
 @Controller('configurations')
 @ApiBearerAuth()
 export class ConfigurationController {
-  constructor(private userService: ConfigurationService) {}
+  constructor(private configurationService: ConfigurationService) {}
 
   @Get()
   @UseGuards(new RolesGuard([Role.SUPER_ADMIN, Role.ADMIN]))
   @ApiOperation({ summary: 'Get configuration threshold values.' })
   async getConfigurationThreshold() {
-    return await this.userService.getConfigurationThreshold();
+    return await this.configurationService.getConfigurationThreshold();
   }
 
   @Patch()
@@ -24,6 +24,6 @@ export class ConfigurationController {
   async updateConfigurationThreshold(
     @Body() data: UpdateConfigurationThresholdRequestDto,
   ) {
-    return await this.userService.updateConfigurationThreshold(data);
+    return await this.configurationService.updateConfigurationThreshold(data);
   }
 }

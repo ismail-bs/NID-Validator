@@ -52,5 +52,6 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
     }
 
     res.status(status || HttpStatus.INTERNAL_SERVER_ERROR).json({ error });
+    res.header['error'] = true;
   }
 }
