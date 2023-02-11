@@ -39,6 +39,7 @@ export class LoggerMiddleware implements NestMiddleware {
       console.log({ data });
 
       // add into db if the env value is true
+      // TODO
 
       // Getting the request log
       this.logger.log(
