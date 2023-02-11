@@ -10,16 +10,21 @@ export class UserRepository {
       const newUser = createdUser?.toObject();
       delete newUser?.password;
       return newUser;
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error.message);
       return null;
     }
   }
 
   async findUser(query: Record<string, any>): Promise<User | null> {
-    return await UserModel.findOne(query)
-      .select('-_id -resetPasswordToken -resetPasswordExpires')
-      .lean();
+    try {
+      return await UserModel.findOne(query)
+        .select('-_id -resetPasswordToken -resetPasswordExpires')
+        .lean();
+    } catch (error) {
+      console.log(error.message);
+      return null;
+    }
   }
 
   async getAllUsers(
@@ -27,26 +32,43 @@ export class UserRepository {
     offset?: number,
     limit?: number,
   ): Promise<User[] | null> {
-    return await UserModel.find(query)
-      .skip(offset)
-      .limit(limit)
-      .select('-_id -resetPasswordToken -resetPasswordExpires')
-      .lean();
+    try {
+      return await UserModel.find(query)
+        .skip(offset)
+        .limit(limit)
+        .select('-_id -resetPasswordToken -resetPasswordExpires')
+        .lean();
+    } catch (error) {
+      console.log(error.message);
+      return null;
+    }
   }
 
   async updateUser(
     userId: string,
     user: Record<string, any>,
   ): Promise<User | null> {
-    return await UserModel.findOneAndUpdate({ id: userId }, user, { new: true })
-      .select('-password -_id -resetPasswordToken -resetPasswordExpires')
-      .lean()
-      .exec();
+    try {
+      return await UserModel.findOneAndUpdate({ id: userId }, user, {
+        new: true,
+      })
+        .select('-password -_id -resetPasswordToken -resetPasswordExpires')
+        .lean()
+        .exec();
+    } catch (error) {
+      console.log(error.message);
+      return null;
+    }
   }
 
   async deleteUser(query: Record<string, any>): Promise<User | null> {
-    return await UserModel.findOneAndRemove(query)
-      .select('-_id -resetPasswordToken -resetPasswordExpires')
-      .lean();
+    try {
+      return await UserModel.findOneAndRemove(query)
+        .select('-_id -resetPasswordToken -resetPasswordExpires')
+        .lean();
+    } catch (error) {
+      console.log(error.message);
+      return null;
+    }
   }
 }
