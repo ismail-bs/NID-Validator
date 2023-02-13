@@ -11,8 +11,8 @@ const {
 } = process.env;
 
 export const swaggerConfig = {
-  title: SWAGGER_TITLE || 'FITSOMNIA',
-  description: SWAGGER_DESCRIPTION || 'FITSOMNIA API',
+  title: SWAGGER_TITLE || 'NID VALIDATOR',
+  description: SWAGGER_DESCRIPTION || 'NID VALIDATOR API',
   version: SWAGGER_VERSION || '1.0',
   auth: {
     type: SWAGGER_AUTH_TYPE || 'http',
