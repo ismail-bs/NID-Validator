@@ -108,7 +108,19 @@ export class UserService {
       offset,
       limit,
     );
-    return this.response.success(users);
+    return this.response.success(users || []);
+  }
+
+  async getAllAdmins(
+    offset?: number,
+    limit?: number,
+  ): Promise<IResponse<User[]>> {
+    const users = await this.userRepo.getAllUsers(
+      { role: Role.ADMIN },
+      offset,
+      limit,
+    );
+    return this.response.success(users || []);
   }
 
   async deleteUser(userId: string): Promise<IResponse<{ message: string }>> {
