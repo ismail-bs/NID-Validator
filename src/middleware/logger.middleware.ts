@@ -2,6 +2,7 @@ import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { loggerConfig } from 'config/logger';
 import { Request, Response, NextFunction } from 'express';
 import { LoggerLevel, LoggerResponse, Role, User } from 'src/entity';
+import { LoggerHelper } from 'src/modules/logger/helper/logger.helper';
 import { LoggerRepository } from 'src/modules/logger/repository/logger.repository';
 
 @Injectable()
@@ -37,7 +38,7 @@ export class LoggerMiddleware implements NestMiddleware {
           url: `${origin}${originalUrl}`,
           method,
           userAgent,
-          // ip: LoggerDatabaseHelper.IP6to4(ip || remoteAddress), //? need to uncomment later.
+          // ip: LoggerHelper.IP6to4(ip || remoteAddress), //? need to uncomment later.
           ip: ip || remoteAddress,
           email: user ? user.email : null,
           requestBody: JSON.stringify(req.body),
