@@ -11,7 +11,7 @@ import { APIResponseModule } from './internal/api-response/api-response.module';
 import { ConfigurationModule } from './modules/configuration/configuration.module';
 import { NIDModule } from './modules/nid/nid.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
-import { MiddlewareResponseModule } from './modules/response/response.module';
+import { LoggerModule } from './modules/logger/logger.module';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { MiddlewareResponseModule } from './modules/response/response.module';
     APIResponseModule,
     ConfigurationModule,
     NIDModule,
-    MiddlewareResponseModule,
+    LoggerModule,
   ],
 })
 export class AppModule implements NestModule {

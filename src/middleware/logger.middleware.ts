@@ -1,8 +1,8 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { loggerConfig } from 'config/logger';
 import { Request, Response, NextFunction } from 'express';
-import { MiddlewareResponse, Role, User } from 'src/entity';
-import { MiddlewareResponseDatabaseHelper } from './database';
+import { LoggerResponse, Role, User } from 'src/entity';
+import { LoggerRepository } from 'src/modules/logger/repository/logger.repository';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -30,11 +30,11 @@ export class LoggerMiddleware implements NestMiddleware {
 
       // add into db if the env value is true
       if (loggerConfig.insertDB) {
-        const data: MiddlewareResponse = {
+        const data: LoggerResponse = {
           url: `${origin}${originalUrl}`,
           method,
           userAgent,
-          // ip: MiddlewareResponseDatabaseHelper.IP6to4(ip || remoteAddress), //? need to uncomment later.
+          // ip: LoggerDatabaseHelper.IP6to4(ip || remoteAddress), //? need to uncomment later.
           ip: ip || remoteAddress,
           email: user ? user.email : null,
           requestBody: JSON.stringify(req.body),
@@ -45,7 +45,7 @@ export class LoggerMiddleware implements NestMiddleware {
 
         // Check if the user is not a super admin. If the condition is met, add it to the database.
         !(user && user.role === Role.SUPER_ADMIN) &&
-          MiddlewareResponseDatabaseHelper.addResponse(data);
+          LoggerRepository.addResponse(data);
       }
 
       // Getting the request log

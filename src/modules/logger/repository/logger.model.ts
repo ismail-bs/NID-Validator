@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
-import { MiddlewareResponse } from 'src/entity';
+import { LoggerResponse } from 'src/entity';
 
-const MiddlewareResponseSchema = new Schema<MiddlewareResponse>(
+const LoggerSchema = new Schema<LoggerResponse>(
   {
     url: {
       type: String,
@@ -49,8 +49,5 @@ const MiddlewareResponseSchema = new Schema<MiddlewareResponse>(
   },
 );
 
-const MiddlewareResponseModel = model<MiddlewareResponse>(
-  'response',
-  MiddlewareResponseSchema,
-);
-export { MiddlewareResponseModel };
+const LoggerModel = model<LoggerResponse>('logger', LoggerSchema);
+export { LoggerModel };

@@ -1,4 +1,4 @@
-export class MiddlewareResponse {
+export class LoggerResponse {
   url: string;
   method: string;
   userAgent: string;
