@@ -3,7 +3,7 @@ import { User, Role } from 'src/entity';
 
 export class UserDto implements User {
   @ApiProperty()
-  id: string;
+  _id: string;
 
   @ApiProperty()
   email: string;

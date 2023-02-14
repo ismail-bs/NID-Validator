@@ -91,7 +91,7 @@ export class AuthService {
         );
 
       const payload: UserJwtPayload = {
-        id: user.id,
+        _id: user._id,
         email: user.email,
         role: user.role,
         logInTime: Date.now(),
@@ -142,7 +142,7 @@ export class AuthService {
       resetPasswordExpires: Date.now() + ONE_HOUR_IN_MILLI_SEC,
     };
 
-    const updatedUser = await this.userRepo.updateUser(user.id, updates);
+    const updatedUser = await this.userRepo.updateUser(user._id, updates);
     if (!updatedUser)
       throw new APIException(
         UserErrorMessages.CANNOT_UPDATE_USER,
@@ -197,7 +197,7 @@ export class AuthService {
     user.resetPasswordExpires = null;
     user.resetPasswordToken = null;
 
-    const updatedUser = await this.userRepo.updateUser(user.id, user);
+    const updatedUser = await this.userRepo.updateUser(user._id, user);
     if (!updatedUser)
       throw new APIException(
         AuthErrorMessages.PASSWORD_RESET_FAILED,

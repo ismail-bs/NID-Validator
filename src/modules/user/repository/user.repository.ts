@@ -19,7 +19,7 @@ export class UserRepository {
   async findUser(query: Record<string, any>): Promise<User | null> {
     try {
       return await UserModel.findOne(query)
-        .select('-_id -resetPasswordToken -resetPasswordExpires')
+        .select('-resetPasswordToken -resetPasswordExpires')
         .lean();
     } catch (error) {
       console.log(error.message);
@@ -36,7 +36,7 @@ export class UserRepository {
       return await UserModel.find(query)
         .skip(offset)
         .limit(limit)
-        .select('-_id -resetPasswordToken -resetPasswordExpires')
+        .select('-resetPasswordToken -resetPasswordExpires')
         .lean();
     } catch (error) {
       console.log(error.message);
@@ -52,7 +52,7 @@ export class UserRepository {
       return await UserModel.findOneAndUpdate({ id: userId }, user, {
         new: true,
       })
-        .select('-password -_id -resetPasswordToken -resetPasswordExpires')
+        .select('-password -resetPasswordToken -resetPasswordExpires')
         .lean()
         .exec();
     } catch (error) {
@@ -64,7 +64,7 @@ export class UserRepository {
   async deleteUser(query: Record<string, any>): Promise<User | null> {
     try {
       return await UserModel.findOneAndRemove(query)
-        .select('-_id -resetPasswordToken -resetPasswordExpires')
+        .select('-resetPasswordToken -resetPasswordExpires')
         .lean();
     } catch (error) {
       console.log(error.message);

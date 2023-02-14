@@ -1,5 +1,5 @@
 export class UserJwtPayload {
-  id: string;
+  _id: string;
   email: string;
   logInTime: number;
   role: string;

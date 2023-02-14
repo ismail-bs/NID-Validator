@@ -1,7 +1,7 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { loggerConfig } from 'config/logger';
 import { Request, Response, NextFunction } from 'express';
-import { LoggerResponse, Role, User } from 'src/entity';
+import { LoggerLevel, LoggerResponse, Role, User } from 'src/entity';
 import { LoggerRepository } from 'src/modules/logger/repository/logger.repository';
 
 @Injectable()
@@ -13,10 +13,12 @@ export class LoggerMiddleware implements NestMiddleware {
     const { remoteAddress } = connection;
     const userAgent = req.get('user-agent') || '';
     const origin = req.get('origin') || '';
-    (res as any).header.error = false; // If any error occurs, then add true to res.header in the exception filter file. path -> '/src/internal/exception/all-exception-filter.ts'
+    // If any error occurs, then add true to res.header in the exception filter file.
+    // Path -> '/src/internal/exception/all-exception-filter.ts'
+    (res as any).header.error = false;
     let responseBody = null;
 
-    // get the response body.
+    // Obtain the body of the response.
     const send = res.send;
     res.send = (body) => {
       responseBody = body;
@@ -28,8 +30,9 @@ export class LoggerMiddleware implements NestMiddleware {
       const { statusCode } = res;
       const user: User = req.user as any;
 
-      // add into db if the env value is true
-      if (loggerConfig.insertDB) {
+      // If the env value is true, insert it into the database.
+      // and also check if the user is not a super admin. If the condition is met, add it to the database.
+      if (loggerConfig.insertDB && !(user && user.role === Role.SUPER_ADMIN)) {
         const data: LoggerResponse = {
           url: `${origin}${originalUrl}`,
           method,
@@ -41,11 +44,13 @@ export class LoggerMiddleware implements NestMiddleware {
           statusCode,
           response: responseBody,
           isError: (res as any).header?.error ? true : false,
+          level: originalUrl?.startsWith('api/nid')
+            ? LoggerLevel.NID_VERIFY
+            : null,
         };
 
-        // Check if the user is not a super admin. If the condition is met, add it to the database.
-        !(user && user.role === Role.SUPER_ADMIN) &&
-          LoggerRepository.addResponse(data);
+        // Add data to the database.
+        LoggerRepository.addResponse(data);
       }
 
       // Getting the request log

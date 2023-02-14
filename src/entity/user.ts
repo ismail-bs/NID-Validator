@@ -5,7 +5,7 @@ export enum Role {
 }
 
 export class User {
-  id: string;
+  _id?: string;
   email: string;
   name: string;
   password: string;

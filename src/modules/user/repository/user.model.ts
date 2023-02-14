@@ -1,14 +1,8 @@
 import { model, Schema } from 'mongoose';
-import { randomUUID } from 'crypto';
 import { User, Role } from 'src/entity';
 
 const UserSchema = new Schema<User>(
   {
-    id: {
-      type: String,
-      default: () => randomUUID(),
-      unique: true,
-    },
     name: {
       type: String,
       default: null,

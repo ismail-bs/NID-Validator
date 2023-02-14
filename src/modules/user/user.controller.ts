@@ -32,7 +32,7 @@ export class UserController {
     summary: 'Obtain a logged-in user/admin profile information.',
   })
   async getUser(@UserInfo() user: User) {
-    return await this.userService.getUser(user.id);
+    return await this.userService.getUser(user._id);
   }
 
   @Patch('/profile')
@@ -42,7 +42,7 @@ export class UserController {
     @Body(new ValidationPipe({ whitelist: true })) data: UpdateUserRequestDto,
     @UserInfo() user: User,
   ) {
-    return await this.userService.updateUser(user.id, data);
+    return await this.userService.updateUser(user._id, data);
   }
 
   @Patch('/change-password')
@@ -52,7 +52,7 @@ export class UserController {
     @Body() data: ChangePasswordRequestDto,
     @UserInfo() user: User,
   ) {
-    return await this.userService.changePassword(user.id, data);
+    return await this.userService.changePassword(user._id, data);
   }
 
   @Get('/users')

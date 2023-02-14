@@ -39,6 +39,10 @@ const LoggerSchema = new Schema<LoggerResponse>(
       type: Boolean,
       required: true,
     },
+    level: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: {

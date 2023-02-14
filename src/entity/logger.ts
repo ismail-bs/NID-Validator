@@ -1,3 +1,7 @@
+export enum LoggerLevel {
+  NID_VERIFY = 'NID_VERIFY',
+}
+
 export class LoggerResponse {
   url: string;
   method: string;
@@ -8,4 +12,5 @@ export class LoggerResponse {
   statusCode: number;
   response: string;
   isError: boolean;
+  level?: LoggerLevel;
 }
