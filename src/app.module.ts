@@ -29,7 +29,6 @@ export class AppModule implements NestModule {
     consumer
       .apply(LoggerMiddleware)
       .exclude({ path: 'api/responses', method: RequestMethod.GET })
-      .exclude({ path: 'api/auth/admin/create', method: RequestMethod.POST })
       .forRoutes('*');
   }
 }

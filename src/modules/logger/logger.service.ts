@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LoggerResponse } from 'src/entity';
+import { LoggerResponse, PaginationQuery } from 'src/entity';
 import {
   APIResponse,
   IResponse,
@@ -12,8 +12,14 @@ export class LoggerService {
     private loggerRepo: LoggerRepository,
     private readonly response: APIResponse,
   ) {}
-  async getAllLoggers(): Promise<IResponse<LoggerResponse[]>> {
-    const Loggers = await this.loggerRepo.getAllLoggers({});
-    return this.response.success(Loggers || []);
+  async getAllLoggers(
+    query: PaginationQuery,
+  ): Promise<IResponse<LoggerResponse[]>> {
+    const loggers = await this.loggerRepo.getAllLoggers(
+      {},
+      query.offset,
+      query.limit,
+    );
+    return this.response.success(loggers || []);
   }
 }

@@ -1,8 +1,9 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { Role } from 'src/entity';
 import { LoggerService } from './logger.service';
 import { RolesGuard } from 'src/authentication/guards/auth.guard';
+import { GetAllResponsesQueryDto } from './dto';
 
 @ApiTags('Logger Response API')
 @Controller('logger')
@@ -13,7 +14,7 @@ export class LoggerController {
 
   @Get('/responses')
   @ApiOperation({ summary: 'Get all logger responses.' })
-  async getAllLoggers() {
-    return await this.loggerService.getAllLoggers();
+  async getAllLoggers(@Query() query: GetAllResponsesQueryDto) {
+    return await this.loggerService.getAllLoggers(query);
   }
 }

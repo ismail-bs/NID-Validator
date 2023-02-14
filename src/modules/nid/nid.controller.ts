@@ -1,12 +1,22 @@
-import { Controller, Post, Req, UploadedFile, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  UploadedFile,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
-import { Role } from 'src/entity';
+import { Role, User } from 'src/entity';
 import { NIDService } from './nid.service';
 import { RolesGuard } from 'src/authentication/guards/auth.guard';
 import { ApiFile } from 'src/decorators/file.decorator';
 import { multerOptions } from 'config/multer';
+import { User as UserInfo } from 'src/decorators/auth.decorator';
+import { GetAllResultsQueryDto } from './dto';
 
-@ApiTags('NID Validator API')
+@ApiTags('NID Validator API (user)')
 @Controller('nid')
 @UseGuards(new RolesGuard([Role.USER]))
 @ApiBearerAuth()
@@ -21,5 +31,14 @@ export class NIDController {
     @Req() req: Request,
   ) {
     return await this.nidService.uploadAndVerifyNID(file, req);
+  }
+
+  @Get('/results')
+  @ApiOperation({ summary: 'Get all verify-NID responses.' })
+  async getAllResults(
+    @UserInfo() user: User,
+    @Query() query: GetAllResultsQueryDto,
+  ) {
+    return await this.nidService.getAllResults(user.email, query);
   }
 }

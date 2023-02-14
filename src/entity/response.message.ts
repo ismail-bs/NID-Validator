@@ -38,3 +38,7 @@ export const enum ConfigurationThresholdErrorMessages {
 export const enum NIDValidatorErrorMessages {
   UNSUPPORTED_FILE = 'Unsupported File',
 }
+
+export const enum LoggerResponseErrorMessages {
+  NO_NEED_TO_PASS_OFFSET_OR_LIMIT = 'There is no need to pass offset and limit because the query type is immediate. ',
+}

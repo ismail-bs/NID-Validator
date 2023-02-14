@@ -45,9 +45,10 @@ export class LoggerMiddleware implements NestMiddleware {
           statusCode,
           response: responseBody,
           isError: (res as any).header?.error ? true : false,
-          level: originalUrl?.startsWith('api/nid')
-            ? LoggerLevel.NID_VERIFY
-            : null,
+          level:
+            originalUrl?.startsWith('/api/nid') && method === 'POST'
+              ? LoggerLevel.NID_VERIFY
+              : null,
         };
 
         // Add data to the database.
