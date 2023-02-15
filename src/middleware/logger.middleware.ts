@@ -32,8 +32,7 @@ export class LoggerMiddleware implements NestMiddleware {
       const user: User = req.user as any;
 
       // If the env value is true, insert it into the database.
-      // and also check if the user is not a super admin. If the condition is met, add it to the database.
-      if (loggerConfig.insertDB && !(user && user.role === Role.SUPER_ADMIN)) {
+      if (loggerConfig.insertDB) {
         const data: LoggerResponse = {
           url: `${origin}${originalUrl}`,
           method,

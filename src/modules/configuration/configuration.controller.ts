@@ -12,14 +12,14 @@ export class ConfigurationController {
   constructor(private configurationService: ConfigurationService) {}
 
   @Get()
-  @UseGuards(new RolesGuard([Role.SUPER_ADMIN, Role.ADMIN]))
+  @UseGuards(new RolesGuard([Role.ADMIN]))
   @ApiOperation({ summary: 'Get configuration threshold values.' })
   async getConfigurationThreshold() {
     return await this.configurationService.getConfigurationThreshold();
   }
 
   @Patch()
-  @UseGuards(new RolesGuard([Role.SUPER_ADMIN]))
+  @UseGuards(new RolesGuard([Role.ADMIN]))
   @ApiOperation({ summary: 'Update configuration threshold values.' })
   async updateConfigurationThreshold(
     @Body() data: UpdateConfigurationThresholdRequestDto,

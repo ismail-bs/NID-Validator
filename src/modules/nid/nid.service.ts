@@ -2,7 +2,6 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import {
   LoggerLevel,
   LoggerResponse,
-  LoggerResponseErrorMessages,
   NIDValidatorErrorMessages,
 } from 'src/entity';
 import {
@@ -11,7 +10,6 @@ import {
 } from 'src/internal/api-response/api-response.service';
 import { APIException } from 'src/internal/exception/api.exception';
 import { LoggerRepository } from '../logger/repository/logger.repository';
-import { GetAllResultsQueryEnum } from './dto';
 
 @Injectable()
 export class NIDService {
@@ -37,26 +35,16 @@ export class NIDService {
 
   async getAllResults(
     email: string,
-    query: { offset?: number; limit?: number; type: GetAllResultsQueryEnum },
+    query: { offset?: number; limit?: number },
   ): Promise<IResponse<LoggerResponse[]>> {
-    const { type, offset, limit } = query;
-    if (type === GetAllResultsQueryEnum.IMMEDIATE && (offset || limit)) {
-      throw new APIException(
-        LoggerResponseErrorMessages.NO_NEED_TO_PASS_OFFSET_OR_LIMIT,
-        'NO_NEED_TO_PASS_OFFSET_OR_LIMIT',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    //? Need to clarify the immediate & past upload responses
-    // consider -> immediate responses means the last 5 nid verify requests and responses
+    const { offset, limit } = query;
     const loggers = await this.loggerRepo.getAllLoggers(
       {
         email,
         level: LoggerLevel.NID_VERIFY,
       },
-      type === GetAllResultsQueryEnum.PAST ? (query.offset || 0) + 5 : 0,
-      type === GetAllResultsQueryEnum.PAST ? query.limit : 5,
+      offset,
+      limit,
     );
     return this.response.success(loggers || []);
   }

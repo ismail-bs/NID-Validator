@@ -1,21 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsOptional, IsNumber, IsEnum } from 'class-validator';
+import { IsOptional, IsNumber } from 'class-validator';
 import { PaginationQuery } from 'src/entity';
 
-export enum GetAllResultsQueryEnum {
-  IMMEDIATE = 'IMMEDIATE',
-  PAST = 'PAST',
-}
-
-export class GetAllResultsQueryExtends {
-  type: GetAllResultsQueryEnum;
-}
-
-export class GetAllResultsQueryDto
-  extends GetAllResultsQueryExtends
-  implements PaginationQuery
-{
+export class GetAllResultsQueryDto implements PaginationQuery {
   @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
   @IsOptional()
@@ -27,8 +15,4 @@ export class GetAllResultsQueryDto
   @Type(() => Number)
   @IsNumber()
   limit?: number;
-
-  @ApiProperty({ enum: GetAllResultsQueryEnum, isArray: false })
-  @IsEnum(GetAllResultsQueryEnum)
-  type: GetAllResultsQueryEnum;
 }

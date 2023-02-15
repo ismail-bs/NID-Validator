@@ -1,29 +1,31 @@
 import { Global, Injectable } from '@nestjs/common';
-import { sendGridConfig } from 'config/mail';
-import * as sendGrid from '@sendgrid/mail';
+import { nodemailerConfig } from 'config/mail';
+import { MailOptions, Options } from './mail.service.interface';
+import * as nodemailer from 'nodemailer';
 
 @Global()
 @Injectable()
 export class MailService {
   async sendMail(
-    to: string,
+    email: string,
     subject: string,
-    text: string,
-    html: string,
-  ): Promise<void> {
+    mailBody: string,
+  ): Promise<boolean | null> {
+    const mailOptions: Options = {
+      from: nodemailerConfig.user,
+      to: email,
+      subject,
+      html: mailBody,
+    };
     try {
-      sendGrid.setApiKey(sendGridConfig.apiKey);
-      const data = {
-        to,
-        from: 'info@nid_validator.com',
-        subject,
-        text,
-        html,
-      };
-
-      await sendGrid.send(data);
-    } catch (err) {
-      console.log('sendMail err: ', JSON.stringify(err, null, 2));
+      const transporter: nodemailer.Transporter = nodemailer.createTransport(
+        nodemailerConfig.options as MailOptions,
+      );
+      const res = await transporter.sendMail(mailOptions);
+      if (!res) return false;
+      return true;
+    } catch (error) {
+      console.log(error.response);
     }
   }
 }

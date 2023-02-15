@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Patch,
+  Post,
   Query,
   UseGuards,
   ValidationPipe,
@@ -45,7 +46,7 @@ export class UserController {
     return await this.userService.updateUser(user._id, data);
   }
 
-  @Patch('/change-password')
+  @Post('/change-password')
   @UseGuards(new RolesGuard([Role.ADMIN, Role.USER]))
   @ApiOperation({ summary: 'Change password of the authenticate user/admin.' })
   async changePassword(
@@ -57,7 +58,7 @@ export class UserController {
 
   @Get('/users')
   @ApiOperation({ summary: 'Obtain all users profile information.' })
-  @UseGuards(new RolesGuard([Role.ADMIN, Role.SUPER_ADMIN]))
+  @UseGuards(new RolesGuard([Role.ADMIN]))
   async getAllUsers(@Query() query: GetAllUsersQueryDto) {
     const { offset, limit } = query;
     return await this.userService.getAllUsers(offset, limit);
@@ -65,14 +66,14 @@ export class UserController {
 
   @Delete('/users/:userId')
   @ApiOperation({ summary: 'Delete a single user.' })
-  @UseGuards(new RolesGuard([Role.ADMIN, Role.SUPER_ADMIN]))
+  @UseGuards(new RolesGuard([Role.ADMIN]))
   async deleteUser(@Param('userId') userId: string) {
     return await this.userService.deleteUser(userId);
   }
 
   @Get('/admins')
   @ApiOperation({ summary: 'Obtain all admins profile information.' })
-  @UseGuards(new RolesGuard([Role.SUPER_ADMIN]))
+  @UseGuards(new RolesGuard([Role.ADMIN]))
   async getAllAdmins(@Query() query: GetAllUsersQueryDto) {
     const { offset, limit } = query;
     return await this.userService.getAllAdmins(offset, limit);

@@ -109,20 +109,6 @@ export class AuthService {
     }
   }
 
-  async superAdminLogin(): Promise<IResponse<Token>> {
-    try {
-      // TODO: implement login logic for super admin.
-      const payload = {
-        role: Role.SUPER_ADMIN,
-        logInTime: Date.now(),
-      };
-      const token = this.jwtService.sign(payload);
-      return this.response.success({ token });
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
   async forgotPassword(
     email: string,
     baseUrl: string,
@@ -155,12 +141,7 @@ export class AuthService {
 
     try {
       //TODO: add a proper email template & format
-      this.mailService.sendMail(
-        user.email,
-        'Password Reset Link',
-        resetUrl,
-        resetUrl,
-      );
+      this.mailService.sendMail(user.email, 'Password Reset Link', resetUrl);
 
       return this.response.success({
         message:

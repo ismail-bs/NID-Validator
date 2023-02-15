@@ -3,18 +3,42 @@ import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { Role } from 'src/entity';
 import { LoggerService } from './logger.service';
 import { RolesGuard } from 'src/authentication/guards/auth.guard';
-import { GetAllResponsesQueryDto } from './dto';
+import {
+  DailyStatisticsPaginationQueryDto,
+  DateWiseStatisticsPaginationQueryDto,
+  GetAllResponsesQueryDto,
+} from './dto';
 
 @ApiTags('Logger Response API')
-@Controller('logger')
+@Controller()
 @ApiBearerAuth()
-@UseGuards(new RolesGuard([Role.SUPER_ADMIN, Role.ADMIN]))
+@UseGuards(new RolesGuard([Role.ADMIN]))
 export class LoggerController {
   constructor(private loggerService: LoggerService) {}
 
-  @Get('/responses')
+  @Get('/logger/responses')
   @ApiOperation({ summary: 'Get all logger responses.' })
   async getAllLoggers(@Query() query: GetAllResponsesQueryDto) {
     return await this.loggerService.getAllLoggers(query);
+  }
+
+  @Get('/statistics/daily')
+  @ApiOperation({ summary: 'Get Daily Summery.' })
+  async getDailySummery(@Query() query: DailyStatisticsPaginationQueryDto) {
+    return await this.loggerService.getDailySummery(query);
+  }
+
+  @Get('/statistics/weekly')
+  @ApiOperation({ summary: 'Get Weekly Summery.' })
+  async getWeeklySummery(@Query() query: DateWiseStatisticsPaginationQueryDto) {
+    return await this.loggerService.getWeeklySummery(query);
+  }
+
+  @Get('/statistics/monthly')
+  @ApiOperation({ summary: 'Get Daily Summery.' })
+  async getMonthlySummery(
+    @Query() query: DateWiseStatisticsPaginationQueryDto,
+  ) {
+    return await this.loggerService.getMonthlySummery(query);
   }
 }

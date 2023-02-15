@@ -34,7 +34,7 @@ export class NIDController {
   }
 
   @Get('/results')
-  @ApiOperation({ summary: 'Get all verify-NID responses.' })
+  @ApiOperation({ summary: 'Get all past verify-NID responses.' })
   async getAllResults(
     @UserInfo() user: User,
     @Query() query: GetAllResultsQueryDto,

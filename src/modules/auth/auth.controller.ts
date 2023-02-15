@@ -13,23 +13,23 @@ import { Role } from 'src/entity';
 import { RolesGuard } from 'src/authentication/guards/auth.guard';
 
 @ApiTags('Authentication')
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/user/register')
+  @Post('/user-auth/register')
   @ApiOperation({ summary: 'Register as a user.' })
   async userRegister(@Body() data: RegisterRequestDto) {
     return await this.authService.register(data, Role.USER);
   }
 
-  @Post('/user/login')
+  @Post('/user-auth/login')
   @ApiOperation({ summary: 'Login as a user.' })
   async userLogin(@Body() data: LoginRequestDto) {
     return await this.authService.login(data, Role.USER);
   }
 
-  @Post('/user/forgot-password')
+  @Post('/user-auth/forgot-password')
   @ApiOperation({ summary: 'Forgot password' })
   async userForgotPassword(
     @Body() data: ForgotPasswordRequestDto,
@@ -39,21 +39,21 @@ export class AuthController {
     return await this.authService.forgotPassword(data.email, url, Role.USER);
   }
 
-  @Post('/admin/create')
-  @ApiOperation({ summary: 'Create an admin by super admin.' })
+  @Post('/admin-auth/create')
+  @ApiOperation({ summary: 'Create an admin by admin.' })
   @ApiBearerAuth()
-  @UseGuards(new RolesGuard([Role.SUPER_ADMIN]))
+  @UseGuards(new RolesGuard([Role.ADMIN]))
   async createAdmin(@Body() data: RegisterRequestDto) {
     return await this.authService.register(data, Role.ADMIN);
   }
 
-  @Post('/admin/login')
+  @Post('/admin-auth/login')
   @ApiOperation({ summary: 'Login as an admin.' })
   async adminLogin(@Body() data: LoginRequestDto) {
     return await this.authService.login(data, Role.ADMIN);
   }
 
-  @Post('/admin/forgot-password')
+  @Post('/admin-auth/forgot-password')
   @ApiOperation({ summary: 'Forgot password' })
   async adminForgotPassword(
     @Body() data: ForgotPasswordRequestDto,
@@ -63,18 +63,12 @@ export class AuthController {
     return await this.authService.forgotPassword(data.email, url, Role.ADMIN);
   }
 
-  @Post('/reset-password/:token')
+  @Post('/auth/reset-password/:token')
   @ApiOperation({ summary: 'Reset password' })
   async resetPassword(
     @Param() param: ResetPasswordRequestParamsDto,
     @Body() data: ResetPasswordRequestDto,
   ) {
     return await this.authService.resetPassword(param.token, data.password);
-  }
-
-  @Post('/super-admin/login')
-  @ApiOperation({ summary: 'Login as a super admin.' })
-  async superAdminLogin() {
-    return await this.authService.superAdminLogin();
   }
 }

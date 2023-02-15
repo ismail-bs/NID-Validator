@@ -14,3 +14,12 @@ export class LoggerResponse {
   isError: boolean;
   level?: LoggerLevel;
 }
+
+export class DailyStatisticsPaginationQuery {
+  date: Date;
+}
+
+export class DateWiseStatisticsPaginationQuery {
+  startDate: Date;
+  endDate: Date;
+}
