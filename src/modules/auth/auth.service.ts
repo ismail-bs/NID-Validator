@@ -10,8 +10,9 @@ import {
   UserErrorMessages,
   Token,
   AuthSuccessMessages,
-  RegisterRequest,
+  UserRegisterRequest,
   Role,
+  CreateNewAdminRequest,
 } from 'src/entity';
 import { UserRepository } from 'src/modules/user/repository/user.repository';
 import { MailService } from 'src/helper/mailService';
@@ -22,6 +23,8 @@ import {
 import { APIException } from 'src/internal/exception/api.exception';
 import { coreConfig } from 'config/core';
 const ONE_HOUR_IN_MILLI_SEC = 3600000; // 1 hour = 3600000 milliseconds
+const charset =
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 @Injectable()
 export class AuthService {
@@ -33,12 +36,11 @@ export class AuthService {
   ) {}
 
   async register(
-    data: RegisterRequest,
-    role: string,
+    data: UserRegisterRequest,
   ): Promise<IResponse<{ message: string }>> {
     const doesUserExist = await this.userRepo.findUser({
       email: data.email,
-      role,
+      role: Role.USER,
     });
     if (doesUserExist)
       throw new APIException(
@@ -47,25 +49,86 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
 
-    data.password = await bcrypt.hash(data.password, authConfig.salt);
-    data.email = data.email.toLowerCase();
-    const user = await this.userRepo.createUser({
-      ...data,
-      role: role as Role,
-    });
-    if (!user)
+    try {
+      data.password = await bcrypt.hash(data.password, authConfig.salt);
+      data.email = data.email.toLowerCase();
+      const user = await this.userRepo.createUser({
+        ...data,
+        role: Role.USER,
+      });
+      if (!user)
+        throw new APIException(
+          AuthErrorMessages.CANNOT_CREATE_USER,
+          'CANNOT_CREATE_USER',
+          HttpStatus.BAD_REQUEST,
+        );
+
+      return this.response.success({
+        message: AuthSuccessMessages.USER_SIGN_UP_SUCCESSFULLY,
+      });
+    } catch (error) {
+      console.log(error.message);
       throw new APIException(
         AuthErrorMessages.CANNOT_CREATE_USER,
         'CANNOT_CREATE_USER',
         HttpStatus.BAD_REQUEST,
       );
+    }
+  }
 
-    return this.response.success({
-      message:
-        role === Role.USER
-          ? AuthSuccessMessages.USER_SIGN_UP_SUCCESSFULLY
-          : AuthSuccessMessages.ADMIN_SIGN_UP_SUCCESSFULLY,
+  async createAdmin(
+    data: CreateNewAdminRequest,
+  ): Promise<IResponse<{ message: string }>> {
+    const doesAdminExist = await this.userRepo.findUser({
+      email: data.email,
+      role: Role.ADMIN,
     });
+    if (doesAdminExist)
+      throw new APIException(
+        AuthErrorMessages.EMAIL_ALREADY_EXITS,
+        'EMAIL_ALREADY_EXITS',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    try {
+      data.email = data.email.toLowerCase();
+      // create new random password
+      let password = '';
+      const indexes = crypto.webcrypto.getRandomValues(new Uint32Array(10));
+      for (const index of indexes) {
+        password += charset[index % charset.length];
+      }
+      const hashPassword = await bcrypt.hash(password, authConfig.salt);
+      console.log(password);
+      const user = await this.userRepo.createUser({
+        ...data,
+        password: hashPassword,
+        role: Role.ADMIN,
+      });
+      if (!user)
+        throw new APIException(
+          AuthErrorMessages.CANNOT_CREATE_ADMIN,
+          'CANNOT_CREATE_ADMIN',
+          HttpStatus.BAD_REQUEST,
+        );
+
+      // send mail
+      this.mailService.sendMail(
+        user.email,
+        'Admin created',
+        `Your admin account has been created, and your password is "${password}".\nPlease login to your account and change your password.`,
+      );
+      return this.response.success({
+        message: AuthSuccessMessages.ADMIN_SIGN_UP_SUCCESSFULLY,
+      });
+    } catch (error) {
+      console.log(error.message);
+      throw new APIException(
+        AuthErrorMessages.CANNOT_CREATE_ADMIN,
+        'CANNOT_CREATE_ADMIN',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async login(data: LoginRequest, role: string): Promise<IResponse<Token>> {
@@ -174,20 +237,34 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
 
-    user.password = await bcrypt.hash(password, authConfig.salt);
-    user.resetPasswordExpires = null;
-    user.resetPasswordToken = null;
+    try {
+      user.password = await bcrypt.hash(password, authConfig.salt);
+      user.resetPasswordExpires = null;
+      user.resetPasswordToken = null;
 
-    const updatedUser = await this.userRepo.updateUser(user._id, user);
-    if (!updatedUser)
+      const updatedUser = await this.userRepo.updateUser(user._id, user);
+      if (!updatedUser)
+        throw new APIException(
+          AuthErrorMessages.PASSWORD_RESET_FAILED,
+          'PASSWORD_RESET_FAILED',
+          HttpStatus.BAD_REQUEST,
+        );
+
+      this.mailService.sendMail(
+        user.email,
+        'Password Changed',
+        'Your password has been changed',
+      );
+      return this.response.success({
+        message: AuthSuccessMessages.PASSWORD_RESET_SUCCESSFUL,
+      });
+    } catch (error) {
+      console.log(error.message);
       throw new APIException(
         AuthErrorMessages.PASSWORD_RESET_FAILED,
         'PASSWORD_RESET_FAILED',
         HttpStatus.BAD_REQUEST,
       );
-
-    return this.response.success({
-      message: AuthSuccessMessages.PASSWORD_RESET_SUCCESSFUL,
-    });
+    }
   }
 }

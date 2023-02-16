@@ -1,6 +1,7 @@
 export const enum AuthErrorMessages {
   INVALID_CREDENTIALS = 'Invalid Credentials',
   CANNOT_CREATE_USER = 'Cannot create user',
+  CANNOT_CREATE_ADMIN = 'Cannot create admin',
   CANNOT_LOG_IN = 'Cannot Login',
   INVALID_ROLE = 'Invalid Role',
   EMAIL_ALREADY_EXITS = 'This email is already exists',

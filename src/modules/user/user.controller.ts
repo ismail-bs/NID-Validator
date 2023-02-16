@@ -74,8 +74,11 @@ export class UserController {
   @Get('/admins')
   @ApiOperation({ summary: 'Obtain all admins profile information.' })
   @UseGuards(new RolesGuard([Role.ADMIN]))
-  async getAllAdmins(@Query() query: GetAllUsersQueryDto) {
+  async getAllAdmins(
+    @Query() query: GetAllUsersQueryDto,
+    @UserInfo() admin: User,
+  ) {
     const { offset, limit } = query;
-    return await this.userService.getAllAdmins(offset, limit);
+    return await this.userService.getAllAdmins(admin._id, offset, limit);
   }
 }

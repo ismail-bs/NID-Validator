@@ -112,11 +112,12 @@ export class UserService {
   }
 
   async getAllAdmins(
+    myId: string,
     offset?: number,
     limit?: number,
   ): Promise<IResponse<User[]>> {
     const users = await this.userRepo.getAllUsers(
-      { role: Role.ADMIN },
+      { role: Role.ADMIN, _id: { $ne: myId } },
       offset,
       limit,
     );

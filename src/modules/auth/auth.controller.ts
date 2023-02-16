@@ -6,6 +6,7 @@ import {
   LoginRequestDto,
   ResetPasswordRequestDto,
   ResetPasswordRequestParamsDto,
+  CreateNewAdminRequestDto,
 } from './dto';
 import { RegisterRequestDto } from './dto/register';
 import { AuthService } from './auth.service';
@@ -20,7 +21,7 @@ export class AuthController {
   @Post('/user-auth/register')
   @ApiOperation({ summary: 'Register as a user.' })
   async userRegister(@Body() data: RegisterRequestDto) {
-    return await this.authService.register(data, Role.USER);
+    return await this.authService.register(data);
   }
 
   @Post('/user-auth/login')
@@ -40,11 +41,11 @@ export class AuthController {
   }
 
   @Post('/admin-auth/create')
-  @ApiOperation({ summary: 'Create an admin by admin.' })
+  @ApiOperation({ summary: 'Create an new admin by others admin.' })
   @ApiBearerAuth()
   @UseGuards(new RolesGuard([Role.ADMIN]))
-  async createAdmin(@Body() data: RegisterRequestDto) {
-    return await this.authService.register(data, Role.ADMIN);
+  async createAdmin(@Body() data: CreateNewAdminRequestDto) {
+    return await this.authService.createAdmin(data);
   }
 
   @Post('/admin-auth/login')

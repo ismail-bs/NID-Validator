@@ -13,9 +13,14 @@ export class ResetPasswordRequest {
   password: string;
 }
 
-export class RegisterRequest {
+export class UserRegisterRequest {
   email: string;
   password: string;
+}
+
+export class CreateNewAdminRequest {
+  name: string;
+  email: string;
 }
 
 export class LoginRequest {
