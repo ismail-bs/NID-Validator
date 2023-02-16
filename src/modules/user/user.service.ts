@@ -13,14 +13,17 @@ import {
   APIResponse,
   IResponse,
 } from 'src/internal/api-response/api-response.service';
+import { MailService } from 'src/helper/mailService';
 import { APIException } from 'src/internal/exception/api.exception';
 import { UserRepository } from './repository/user.repository';
+import { EmailTemplateHelper } from 'src/helper/mailService/template';
 
 @Injectable()
 export class UserService {
   constructor(
     private userRepo: UserRepository,
     private readonly response: APIResponse,
+    private mailService: MailService,
   ) {}
 
   async updateUser(
@@ -41,27 +44,27 @@ export class UserService {
     userId: string,
     data: ChangePasswordRequest,
   ): Promise<IResponse<{ message: string }>> {
-    try {
-      const { currentPassword, newPassword } = data;
-      const user = await this.userRepo.findUser({ id: userId });
-      if (!user)
-        throw new APIException(
-          UserErrorMessages.CANNOT_FIND_USER,
-          'CANNOT_FIND_USER',
-          HttpStatus.BAD_REQUEST,
-        );
-
-      const doesPasswordMatch = await bcrypt.compare(
-        currentPassword,
-        user.password,
+    const { currentPassword, newPassword } = data;
+    const user = await this.userRepo.findUser({ _id: userId });
+    if (!user)
+      throw new APIException(
+        UserErrorMessages.CANNOT_FIND_USER,
+        'CANNOT_FIND_USER',
+        HttpStatus.BAD_REQUEST,
       );
-      if (!doesPasswordMatch)
-        throw new APIException(
-          UserErrorMessages.CURRENT_PASSWORD_IS_INCORRECT,
-          'CURRENT_PASSWORD_IS_INCORRECT',
-          HttpStatus.BAD_REQUEST,
-        );
 
+    const doesPasswordMatch = await bcrypt.compare(
+      currentPassword,
+      user.password,
+    );
+    if (!doesPasswordMatch)
+      throw new APIException(
+        UserErrorMessages.CURRENT_PASSWORD_IS_INCORRECT,
+        'CURRENT_PASSWORD_IS_INCORRECT',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    try {
       // hash the new password
       user.password = await bcrypt.hash(newPassword, authConfig.salt);
 
@@ -75,6 +78,14 @@ export class UserService {
             HttpStatus.BAD_REQUEST,
           );
 
+      this.mailService.sendMail(
+        user.email,
+        'Password Changed',
+        EmailTemplateHelper.simpleMessageTemplate(
+          user.name,
+          'Your password has been changed.',
+        ),
+      );
       return this.response.success({
         message: UserSuccessMessages.PASSWORD_CHANGED_SUCCESSFUL,
       });
@@ -89,7 +100,7 @@ export class UserService {
   }
 
   async getUser(userId: string): Promise<IResponse<User>> {
-    const user = await this.userRepo.findUser({ id: userId });
+    const user = await this.userRepo.findUser({ _id: userId });
     if (!user)
       throw new APIException(
         UserErrorMessages.CANNOT_FIND_USER,
@@ -125,7 +136,7 @@ export class UserService {
   }
 
   async deleteUser(userId: string): Promise<IResponse<{ message: string }>> {
-    const user = await this.userRepo.deleteUser({ id: userId });
+    const user = await this.userRepo.deleteUser({ _id: userId });
     if (!user)
       throw new APIException(
         UserErrorMessages.CANNOT_DELETE_USER,

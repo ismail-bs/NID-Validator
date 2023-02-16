@@ -200,7 +200,7 @@ export class EmailTemplateHelper {
                     <tr>
                         <td class="content-cell">
                             <div class="f-fallback">
-                                <h1>Hi ${name},</h1> <br>
+                                <h1>Hi ${name},</h1>
                                 <p>  <center> <strong> ${message} </strong></center></p> </br>
                                 <p> If this is you, disregard this email and get in touch with us if you have any inquiries.</p>
                                 <p>

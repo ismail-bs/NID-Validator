@@ -49,7 +49,7 @@ export class UserRepository {
     user: Record<string, any>,
   ): Promise<User | null> {
     try {
-      return await UserModel.findOneAndUpdate({ id: userId }, user, {
+      return await UserModel.findOneAndUpdate({ _id: userId }, user, {
         new: true,
       })
         .select('-password -resetPasswordToken -resetPasswordExpires')
