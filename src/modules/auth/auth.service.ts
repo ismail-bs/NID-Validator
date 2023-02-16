@@ -22,6 +22,7 @@ import {
 } from 'src/internal/api-response/api-response.service';
 import { APIException } from 'src/internal/exception/api.exception';
 import { coreConfig } from 'config/core';
+import { EmailTemplateHelper } from 'src/helper/mailService/template';
 const ONE_HOUR_IN_MILLI_SEC = 3600000; // 1 hour = 3600000 milliseconds
 const charset =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -99,7 +100,6 @@ export class AuthService {
         password += charset[index % charset.length];
       }
       const hashPassword = await bcrypt.hash(password, authConfig.salt);
-      console.log(password);
       const user = await this.userRepo.createUser({
         ...data,
         password: hashPassword,
@@ -115,8 +115,12 @@ export class AuthService {
       // send mail
       this.mailService.sendMail(
         user.email,
-        'Admin created',
-        `Your admin account has been created, and your password is "${password}".\nPlease login to your account and change your password.`,
+        'Admin Created',
+        EmailTemplateHelper.simpleMessageTemplate(
+          user.name,
+          `Your admin account has been created, and your password is "${password}".
+          </br> Please login to your account and change your password.`,
+        ),
       );
       return this.response.success({
         message: AuthSuccessMessages.ADMIN_SIGN_UP_SUCCESSFULLY,
@@ -159,8 +163,8 @@ export class AuthService {
         role: user.role,
         logInTime: Date.now(),
       };
-      const token = this.jwtService.sign(payload);
 
+      const token = this.jwtService.sign(payload);
       return this.response.success({ token });
     } catch (error) {
       console.log(error.message);
@@ -199,12 +203,15 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
 
-    const resetUrl =
+    const action_url =
       baseUrl + '/' + coreConfig.restApiPrefix + '/reset-password/' + token;
 
     try {
-      //TODO: add a proper email template & format
-      this.mailService.sendMail(user.email, 'Password Reset Link', resetUrl);
+      this.mailService.sendMail(
+        user.email,
+        'Password Reset',
+        EmailTemplateHelper.resetPasswordTemplate(user.name, action_url),
+      );
 
       return this.response.success({
         message:
@@ -253,7 +260,10 @@ export class AuthService {
       this.mailService.sendMail(
         user.email,
         'Password Changed',
-        'Your password has been changed',
+        EmailTemplateHelper.simpleMessageTemplate(
+          user.name,
+          'Your password has been changed.',
+        ),
       );
       return this.response.success({
         message: AuthSuccessMessages.PASSWORD_RESET_SUCCESSFUL,
