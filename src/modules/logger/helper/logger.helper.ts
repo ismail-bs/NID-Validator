@@ -2,16 +2,14 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class LoggerHelper {
-  /* Parse IPv6 address to IPv4 address */
+  // Parse an IPv6 address to an IPv4 address
   static parseIp6(ip6str: { toString: () => any }) {
     const str = ip6str.toString();
-
-    // Initialize
-    const ar = [];
-    for (let i = 0; i < 8; i++) ar[i] = 0;
+    const arr = [];
+    for (let i = 0; i < 8; i++) arr[i] = 0;
 
     // Check for trivial IPs
-    if (str == '::') return ar;
+    if (str == '::') return arr;
 
     // Parse
     const sar = str.split(':');
@@ -25,13 +23,13 @@ export class LoggerHelper {
         j = 9 - slen + i;
         continue;
       }
-      ar[j] = parseInt(`0x0${sar[i]}`);
+      arr[j] = parseInt(`0x0${sar[i]}`);
       j++;
     }
-    return ar;
+    return arr;
   }
 
-  /* Convert IPv6 address to IPv4 address */
+  // Convert IPv6 address to IPv4 address
   static IP6to4(ip6: string) {
     const ip6parsed = this.parseIp6(ip6);
     const ip4 = `${ip6parsed[6] >> 8}.${ip6parsed[6] & 0xff}.${

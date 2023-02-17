@@ -14,7 +14,7 @@ export class LoggerRepository {
         .sort({ createdAt: -1 })
         .skip(offset)
         .limit(limit || Number.MAX_SAFE_INTEGER)
-        .select('-_id -createdAt')
+        .select('-_id')
         .lean();
     } catch (error) {
       console.log(error.message);

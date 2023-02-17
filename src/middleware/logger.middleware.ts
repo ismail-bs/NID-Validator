@@ -1,7 +1,7 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { loggerConfig } from 'config/logger';
 import { Request, Response, NextFunction } from 'express';
-import { LoggerLevel, LoggerResponse, Role, User } from 'src/entity';
+import { LoggerLevel, LoggerResponse, User } from 'src/entity';
 import { LoggerHelper } from 'src/modules/logger/helper/logger.helper';
 import { LoggerRepository } from 'src/modules/logger/repository/logger.repository';
 
@@ -28,6 +28,9 @@ export class LoggerMiddleware implements NestMiddleware {
     };
 
     res.on('finish', () => {
+      // console.log(
+      //   Buffer.byteLength(responseBody, 'utf8') / 1024 + ' kilobytes',
+      // );
       const { statusCode } = res;
       const user: User = req.user as any;
 
