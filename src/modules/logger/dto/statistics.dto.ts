@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsOptional, IsNumber, IsDate } from 'class-validator';
 import {
@@ -6,6 +6,7 @@ import {
   DateWiseStatisticsPaginationQuery,
   PaginationQuery,
 } from 'src/entity';
+import { ResponsesQueryExtendDataDto } from './getAllResponse.dto';
 
 export class StatisticsPaginationQueryDto implements PaginationQuery {
   @ApiProperty({ required: false, type: Number })
@@ -22,7 +23,10 @@ export class StatisticsPaginationQueryDto implements PaginationQuery {
 }
 
 export class DailyStatisticsPaginationQueryDto
-  extends StatisticsPaginationQueryDto
+  extends IntersectionType(
+    ResponsesQueryExtendDataDto,
+    StatisticsPaginationQueryDto,
+  )
   implements DailyStatisticsPaginationQuery
 {
   @ApiProperty({ type: Date })
@@ -32,7 +36,10 @@ export class DailyStatisticsPaginationQueryDto
 }
 
 export class DateWiseStatisticsPaginationQueryDto
-  extends StatisticsPaginationQueryDto
+  extends IntersectionType(
+    ResponsesQueryExtendDataDto,
+    StatisticsPaginationQueryDto,
+  )
   implements DateWiseStatisticsPaginationQuery
 {
   @ApiProperty({ type: Date })

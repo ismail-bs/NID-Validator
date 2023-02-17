@@ -9,7 +9,7 @@ import {
   GetAllResponsesQueryDto,
 } from './dto';
 
-@ApiTags('Logger Response API')
+@ApiTags('Logger Response API (Admin)')
 @Controller()
 @ApiBearerAuth()
 @UseGuards(new RolesGuard([Role.ADMIN]))

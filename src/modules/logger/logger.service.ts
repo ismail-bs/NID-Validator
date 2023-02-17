@@ -5,6 +5,7 @@ import {
   LoggerLevel,
   LoggerResponse,
   LoggerResponseErrorMessages,
+  LoggerResponsesQueryExtendData,
   PaginationQuery,
 } from 'src/entity';
 import {
@@ -21,42 +22,54 @@ export class LoggerService {
     private readonly response: APIResponse,
   ) {}
   async getAllLoggers(
-    query: PaginationQuery,
+    condition: PaginationQuery & LoggerResponsesQueryExtendData,
   ): Promise<IResponse<LoggerResponse[]>> {
-    const loggers = await this.loggerRepo.getAllLoggers(
-      {},
-      query.offset,
-      query.limit,
-    );
+    const { offset, limit } = condition;
+
+    // A query will be created if you enter a URL or email address.
+    const query: Record<string, any> = this.generateSearchQuery(condition);
+    const loggers = await this.loggerRepo.getAllLoggers(query, offset, limit);
     return this.response.success(loggers || []);
   }
 
   async getDailySummery(
-    query: PaginationQuery & DailyStatisticsPaginationQuery,
+    condition: PaginationQuery &
+      DailyStatisticsPaginationQuery &
+      LoggerResponsesQueryExtendData,
   ): Promise<IResponse<LoggerResponse[]>> {
-    const date = new Date(query.date);
-    const endDate = new Date(query.date);
-    date.setHours(0, 0, 0, 0);
+    const { date, offset, limit } = condition;
+    // format for dates
+    const startDate = new Date(date);
+    const endDate = new Date(date);
+    startDate.setHours(0, 0, 0, 0);
     endDate.setHours(23, 59, 59, 0);
+
+    // A query will be created if you enter a URL or email address.
+    const query: Record<string, any> = this.generateSearchQuery(condition);
     const summery = await this.loggerRepo.getAllLoggers(
       {
-        createdAt: { $gte: date, $lte: endDate },
+        ...query,
+        createdAt: { $gte: startDate, $lte: endDate },
         level: LoggerLevel.NID_VERIFY,
       },
-      query.offset,
-      query.limit,
+      offset,
+      limit,
     );
     return this.response.success(summery || []);
   }
 
   async getWeeklySummery(
-    query: PaginationQuery & DateWiseStatisticsPaginationQuery,
+    condition: PaginationQuery &
+      DateWiseStatisticsPaginationQuery &
+      LoggerResponsesQueryExtendData,
   ): Promise<IResponse<LoggerResponse[]>> {
-    const startDate = new Date(query.startDate);
-    const endDate = new Date(query.endDate);
+    const { offset, limit } = condition;
+    // format for dates
+    const startDate = new Date(condition.startDate);
+    const endDate = new Date(condition.endDate);
     startDate.setHours(0, 0, 0, 0);
     endDate.setHours(23, 59, 59, 0);
-    // check the date range is valid or not (week = 7 days)
+    // Verify the validity of the date range (week = 7 days).
     if (
       Math.ceil(
         Math.abs(endDate.getTime() - startDate.getTime()) /
@@ -71,31 +84,36 @@ export class LoggerService {
       );
     }
 
+    // A query will be created if you enter a URL or email address.
+    const query: Record<string, any> = this.generateSearchQuery(condition);
     const summery = await this.loggerRepo.getAllLoggers(
       {
-        createdAt: {
-          $gte: startDate,
-          $lte: endDate,
-        },
+        ...query,
+        createdAt: { $gte: startDate, $lte: endDate },
         level: LoggerLevel.NID_VERIFY,
       },
-      query.offset,
-      query.limit,
+      offset,
+      limit,
     );
     return this.response.success(summery || []);
   }
 
   async getMonthlySummery(
-    query: PaginationQuery & DateWiseStatisticsPaginationQuery,
+    condition: PaginationQuery &
+      DateWiseStatisticsPaginationQuery &
+      LoggerResponsesQueryExtendData,
   ): Promise<IResponse<LoggerResponse[]>> {
-    const startDate = new Date(query.startDate);
-    const endDate = new Date(query.endDate);
+    const { offset, limit } = condition;
+    // format for dates
+    const startDate = new Date(condition.startDate);
+    const endDate = new Date(condition.endDate);
     startDate.setHours(0, 0, 0, 0);
     endDate.setHours(23, 59, 59, 0);
+
     const dayDiff = Math.ceil(
       Math.abs(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
     );
-    // check the date range is valid or not (month = 28/29/30/31 days)
+    // Verify the validity of the date range (month = 28/29/30/31 days).
     if (!(dayDiff >= 28 && dayDiff <= 31) || startDate > endDate) {
       throw new APIException(
         LoggerResponseErrorMessages.INCORRECT_DATE_RANGE,
@@ -104,17 +122,35 @@ export class LoggerService {
       );
     }
 
+    // A query will be created if you enter a URL or email address.
+    const query: Record<string, any> = this.generateSearchQuery(condition);
     const summery = await this.loggerRepo.getAllLoggers(
       {
-        createdAt: {
-          $gte: startDate,
-          $lte: endDate,
-        },
+        ...query,
+        createdAt: { $gte: startDate, $lte: endDate },
         level: LoggerLevel.NID_VERIFY,
       },
-      query.offset,
-      query.limit,
+      offset,
+      limit,
     );
     return this.response.success(summery || []);
+  }
+
+  // Query generator
+  private generateSearchQuery(condition: {
+    url?: string;
+    email?: string;
+  }): object {
+    const { url, email } = condition;
+    const query: Record<string, any> = {};
+
+    if (url !== undefined && url !== '') {
+      query.url = url;
+    }
+    if (email !== undefined && email !== '') {
+      query.email = email;
+    }
+
+    return query;
   }
 }

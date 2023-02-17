@@ -13,7 +13,7 @@ import { AuthService } from './auth.service';
 import { Role } from 'src/entity';
 import { RolesGuard } from 'src/authentication/guards/auth.guard';
 
-@ApiTags('Authentication')
+@ApiTags('Authentication API (Admin/User)')
 @Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -41,7 +41,7 @@ export class AuthController {
   }
 
   @Post('/admin-auth/create')
-  @ApiOperation({ summary: 'Create an new admin by others admin.' })
+  @ApiOperation({ summary: 'Create a new admin by admin.' })
   @ApiBearerAuth()
   @UseGuards(new RolesGuard([Role.ADMIN]))
   async createAdmin(@Body() data: CreateNewAdminRequestDto) {
@@ -65,7 +65,7 @@ export class AuthController {
   }
 
   @Post('/auth/reset-password/:token')
-  @ApiOperation({ summary: 'Reset password' })
+  @ApiOperation({ summary: 'Reset password (User/Admin)' })
   async resetPassword(
     @Param() param: ResetPasswordRequestParamsDto,
     @Body() data: ResetPasswordRequestDto,

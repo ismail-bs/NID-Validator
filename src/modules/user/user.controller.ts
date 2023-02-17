@@ -21,7 +21,7 @@ import {
 } from './dto';
 import { RolesGuard } from 'src/authentication/guards/auth.guard';
 
-@ApiTags('Profile API')
+@ApiTags('Personal Profile API(Admin/User)')
 @Controller()
 @ApiBearerAuth()
 export class UserController {
@@ -57,22 +57,15 @@ export class UserController {
   }
 
   @Get('/users')
-  @ApiOperation({ summary: 'Obtain all users profile information.' })
+  @ApiOperation({ summary: 'Obtain all users profile information by admin.' })
   @UseGuards(new RolesGuard([Role.ADMIN]))
   async getAllUsers(@Query() query: GetAllUsersQueryDto) {
     const { offset, limit } = query;
     return await this.userService.getAllUsers(offset, limit);
   }
 
-  @Delete('/users/:userId')
-  @ApiOperation({ summary: 'Delete a single user.' })
-  @UseGuards(new RolesGuard([Role.ADMIN]))
-  async deleteUser(@Param('userId') userId: string) {
-    return await this.userService.deleteUser(userId);
-  }
-
   @Get('/admins')
-  @ApiOperation({ summary: 'Obtain all admins profile information.' })
+  @ApiOperation({ summary: 'Obtain all admins profile information by admin.' })
   @UseGuards(new RolesGuard([Role.ADMIN]))
   async getAllAdmins(
     @Query() query: GetAllUsersQueryDto,
@@ -80,5 +73,12 @@ export class UserController {
   ) {
     const { offset, limit } = query;
     return await this.userService.getAllAdmins(admin._id, offset, limit);
+  }
+
+  @Delete('/users/:userId')
+  @ApiOperation({ summary: 'Delete a single user by admin.' })
+  @UseGuards(new RolesGuard([Role.ADMIN]))
+  async deleteUser(@Param('userId') userId: string) {
+    return await this.userService.deleteUser(userId);
   }
 }

@@ -16,7 +16,7 @@ import { multerOptions } from 'config/multer';
 import { User as UserInfo } from 'src/decorators/auth.decorator';
 import { GetAllResultsQueryDto } from './dto';
 
-@ApiTags('NID Validator API (user)')
+@ApiTags('NID Validator API (User)')
 @Controller('nid')
 @UseGuards(new RolesGuard([Role.USER]))
 @ApiBearerAuth()

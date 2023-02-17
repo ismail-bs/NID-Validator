@@ -23,3 +23,8 @@ export class DateWiseStatisticsPaginationQuery {
   startDate: Date;
   endDate: Date;
 }
+
+export class LoggerResponsesQueryExtendData {
+  url?: string;
+  email?: string;
+}

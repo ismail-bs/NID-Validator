@@ -5,7 +5,7 @@ import { ConfigurationService } from './configuration.service';
 import { RolesGuard } from 'src/authentication/guards/auth.guard';
 import { UpdateConfigurationThresholdRequestDto } from './dto';
 
-@ApiTags('Configurations API')
+@ApiTags('Configuration Threshold API (Admin)')
 @Controller('configurations')
 @ApiBearerAuth()
 export class ConfigurationController {
