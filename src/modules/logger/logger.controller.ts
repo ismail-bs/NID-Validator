@@ -10,13 +10,13 @@ import {
 } from './dto';
 
 @ApiTags('Logger Response API (Admin)')
-@Controller()
+@Controller('logger')
 @ApiBearerAuth()
 @UseGuards(new RolesGuard([Role.ADMIN]))
 export class LoggerController {
   constructor(private loggerService: LoggerService) {}
 
-  @Get('/logger/responses')
+  @Get('/all')
   @ApiOperation({ summary: 'Get all logger responses.' })
   async getAllLoggers(@Query() query: GetAllResponsesQueryDto) {
     return await this.loggerService.getAllLoggers(query);

@@ -1,10 +1,5 @@
 import { HelperModule } from './helper/helper.module';
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { APIResponseModule } from './internal/api-response/api-response.module';
@@ -26,10 +21,6 @@ import { LoggerModule } from './modules/logger/logger.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggerMiddleware)
-      .exclude({ path: 'api/admin', method: RequestMethod.POST })
-      .exclude({ path: 'api/change-password', method: RequestMethod.POST })
-      .forRoutes('*');
+    consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }

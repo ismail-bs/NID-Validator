@@ -4,6 +4,12 @@ import { Request, Response, NextFunction } from 'express';
 import { LoggerLevel, LoggerResponse, User } from 'src/entity';
 import { LoggerHelper } from 'src/modules/logger/helper/logger.helper';
 import { LoggerRepository } from 'src/modules/logger/repository/logger.repository';
+const excludePaths = [
+  '/api/admin-auth/',
+  '/api/auth/reset-password/',
+  '/api/logger/',
+  '/api/change-password',
+];
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -28,14 +34,20 @@ export class LoggerMiddleware implements NestMiddleware {
     };
 
     res.on('finish', () => {
-      // console.log(
-      //   Buffer.byteLength(responseBody, 'utf8') / 1024 + ' kilobytes',
-      // );
       const { statusCode } = res;
       const user: User = req.user as any;
+      let pathExcludeError = false;
 
-      // If the env value is true, insert it into the database.
-      if (loggerConfig.insertDB) {
+      // Verify that the exclusion paths are present in the original URL.
+      for (let i = 0, len = excludePaths.length; i < len; i++) {
+        if (excludePaths[i] !== '' && originalUrl.startsWith(excludePaths[i])) {
+          pathExcludeError = true;
+          break;
+        }
+      }
+
+      // If the env value is true and pathExcludeError is false, then insert it into the database.
+      if (loggerConfig.insertDB && !pathExcludeError) {
         const data: LoggerResponse = {
           url: `${origin}${originalUrl}`,
           method,
