@@ -1,7 +1,7 @@
 # NID Validator Backend
 
-NID Validator API Server
-## Getting started
+A service that uses government APIs to verify users submitted NIDs and store them in databases. The service will be able to make its API available to other authenticated applications so they can use it.
+# Getting Started
 
 ### Requirements
 
@@ -9,7 +9,7 @@ Make sure your workstation has at least these elements before beginning:
 
 - An up-to-date release of [`NodeJS`](https://nodejs.org/) (use the LTS version)
 - [`NPM`](https://www.npmjs.com/) or [`YARN`](https://yarnpkg.com/)
-- A database such as [`MongoDB`](https://www.mongodb.com/).
+- [`MongoDB`](https://www.mongodb.com/) Database.
 - [`Git`](https://git-scm.com/)
 
 ### Project configuration
@@ -64,9 +64,9 @@ $ npm run test:e2e
 
 Before you can connect to MongoDB, you must first install it on your local computer. You can install MongoDB by following the steps below.
 
-- For the Installation process in [`Windows`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/) or you can try [`Geeksforgeeks`](https://www.geeksforgeeks.org/how-to-install-mongodb-on-windows/)
-- For the Installation process in [`Ubuntu`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/) or you can try [`Geeksforgeeks`](https://www.geeksforgeeks.org/how-to-install-and-configure-mongodb-in-ubuntu/)
-- For the Installation process in [`Mac`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/) or you can try [`Geeksforgeeks`](https://www.geeksforgeeks.org/how-to-install-mongodb-on-macos/)
+- For Windows installation instructions, click here. [`MongoDB`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/) or [`Geeksforgeeks`](https://www.geeksforgeeks.org/how-to-install-mongodb-on-windows/)
+- For Ubuntu installation instructions, click here. [`MongoDB`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/) or [`Geeksforgeeks`](https://www.geeksforgeeks.org/how-to-install-and-configure-mongodb-in-ubuntu/)
+- For Mac installation instructions, click here. [`MongoDB`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/) or [`Geeksforgeeks`](https://www.geeksforgeeks.org/how-to-install-mongodb-on-macos/)
 
 MongoDB default configuration -> the hostname is **`localhost`**, and the port is **`27017`**.
 
