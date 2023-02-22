@@ -58,22 +58,19 @@ $ npm run test
 
 # e2e tests
 $ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
 ### Connect to MongoDB
 
-You need to install MongoDB on your local computer before you can connect to it. You can install MongoDB by following these instructions.
+Before you can connect to MongoDB, you must first install it on your local computer. You can install MongoDB by following the steps below.
 
-- For the Installation process in Windows -> [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/) or you can try [Geeksforgeeks](https://www.geeksforgeeks.org/how-to-install-mongodb-on-windows/)
-- For the Installation process in Ubuntu -> [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/) or you can try [Geeksforgeeks](https://www.geeksforgeeks.org/how-to-install-and-configure-mongodb-in-ubuntu/)
-- For the Installation process in Mac OS -> [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/) or you can try [Geeksforgeeks](https://www.geeksforgeeks.org/how-to-install-mongodb-on-macos/)
+- For the Installation process in [`Windows`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/) or you can try [`Geeksforgeeks`](https://www.geeksforgeeks.org/how-to-install-mongodb-on-windows/)
+- For the Installation process in [`Ubuntu`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/) or you can try [`Geeksforgeeks`](https://www.geeksforgeeks.org/how-to-install-and-configure-mongodb-in-ubuntu/)
+- For the Installation process in [`Mac`](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/) or you can try [`Geeksforgeeks`](https://www.geeksforgeeks.org/how-to-install-mongodb-on-macos/)
 
-MongoDB default settings -> the Hostname would be the **`localhost`**, and the port is **`27017`**.
+MongoDB default configuration -> the hostname is **`localhost`**, and the port is **`27017`**.
 
 
-Techstack included:
+### Techstack included
 - [NestJS](https://nextjs.org/docs) - A progressive Node.js framework.
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html) - The TypeScript Handbook.
+- [TypeScript](https://www.typescriptlang.org/docs/handbook/intro.html) - The TypeScript Handbook.
