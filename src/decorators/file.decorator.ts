@@ -1,8 +1,6 @@
 import { applyDecorators, UseInterceptors } from '@nestjs/common';
-import {
-  FileFieldsInterceptor,
-  FileInterceptor,
-} from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import {
   MulterField,
   MulterOptions,
@@ -11,30 +9,7 @@ import {
   ReferenceObject,
   SchemaObject,
 } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
-import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 
-export function ApiFile(
-  fieldName = 'file',
-  required = false,
-  localOptions?: MulterOptions,
-) {
-  return applyDecorators(
-    ApiConsumes('multipart/form-data'),
-    ApiBody({
-      schema: {
-        type: 'object',
-        required: required ? [fieldName] : [],
-        properties: {
-          [fieldName]: {
-            type: 'string',
-            format: 'binary',
-          },
-        },
-      },
-    }),
-    UseInterceptors(FileInterceptor(fieldName, localOptions)),
-  );
-}
 export type UploadFields = MulterField & { required: boolean };
 
 export function ApiFileFields(
