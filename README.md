@@ -50,16 +50,6 @@ $ npm run start:prod
 
 Open `http://localhost:3001/api` with your browser to see api live.
 
-### Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-```
-
 ### Connect to MongoDB
 
 Before you can connect to MongoDB, you must first install it on your local computer. You can install MongoDB by following the steps below.
