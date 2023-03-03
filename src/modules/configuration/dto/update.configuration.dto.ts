@@ -10,53 +10,35 @@ export class UpdateConfigurationThresholdRequestDto
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
+  name: number;
+
+  @ApiProperty({ required: false, type: Number })
+  @Type(() => Number)
+  @IsOptional()
+  @IsNumber()
   nameBn: number;
 
   @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
-  nameEn: number;
+  fatherBn: number;
 
   @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
-  photo: number;
+  motherBn: number;
 
   @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
-  signature: number;
+  dob: number;
 
   @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
-  fathersNameBn: number;
-
-  @ApiProperty({ required: false, type: Number })
-  @Type(() => Number)
-  @IsOptional()
-  @IsNumber()
-  mothersNameBn: number;
-
-  @ApiProperty({ required: false, type: Number })
-  @Type(() => Number)
-  @IsOptional()
-  @IsNumber()
-  dateOfBirth: number;
-
-  @ApiProperty({ required: false, type: Number })
-  @Type(() => Number)
-  @IsOptional()
-  @IsNumber()
-  nidNumber: number;
-
-  @ApiProperty({ required: false, type: Number })
-  @Type(() => Number)
-  @IsOptional()
-  @IsNumber()
-  address: number;
+  nid: number;
 }

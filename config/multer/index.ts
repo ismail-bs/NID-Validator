@@ -9,20 +9,3 @@ export const multerConfig = {
     'image/jpg',
   ],
 };
-
-export const multerOptions = {
-  // File size limits
-  limits: {
-    fileSize: +multerConfig.maxFileSize,
-  },
-  // Check the mimetypes of the file
-  fileFilter: (req: any, file: Express.Multer.File, cb: any) => {
-    req.fileValidationError = false;
-    if (file && multerConfig.mimeTypes.includes(file.mimetype)) {
-      cb(null, true, req.fileValidationError);
-    } else {
-      req.fileValidationError = true;
-      return cb(null, false, req.fileValidationError);
-    }
-  },
-};

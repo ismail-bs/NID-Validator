@@ -3,39 +3,27 @@ import { ConfigurationThreshold } from 'src/entity';
 
 const ConfigurationThresholdSchema = new Schema<ConfigurationThreshold>(
   {
+    name: {
+      type: Number,
+      default: 0,
+    },
     nameBn: {
       type: Number,
       default: 0,
     },
-    nameEn: {
+    fatherBn: {
       type: Number,
       default: 0,
     },
-    photo: {
+    motherBn: {
       type: Number,
       default: 0,
     },
-    signature: {
+    dob: {
       type: Number,
       default: 0,
     },
-    fathersNameBn: {
-      type: Number,
-      default: 0,
-    },
-    mothersNameBn: {
-      type: Number,
-      default: 0,
-    },
-    dateOfBirth: {
-      type: Number,
-      default: 0,
-    },
-    nidNumber: {
-      type: Number,
-      default: 0,
-    },
-    address: {
+    nid: {
       type: Number,
       default: 0,
     },

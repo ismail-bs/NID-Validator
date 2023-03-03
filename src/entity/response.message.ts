@@ -37,7 +37,18 @@ export const enum ConfigurationThresholdErrorMessages {
 }
 
 export const enum NIDValidatorErrorMessages {
+  CANNOT_VERIFY_NID = 'Can not verify Nid',
+  NAME_DOES_NOT_MATCH = 'Name does not match',
+  BENGALI_NAME_DOES_NOT_MATCH = 'Bengali Name does not match',
+  DATE_OF_BIRTH_DOES_NOT_MATCH = 'Date of birth does not match',
+  NID_NUMBER_DOES_NOT_MATCH = 'NID number does not match',
+  FATHER_NAME_DOES_NOT_MATCH = `Father's name does not match`,
+  MOTHER_NAME_DOES_NOT_MATCH = `Mother's name does not match`,
+}
+
+export const enum FilesValidatorErrorMessages {
   UNSUPPORTED_FILE = 'Unsupported File',
+  FILE_SIZE_EXTEND = 'Any file size is not greater than 3 MB',
 }
 
 export const enum LoggerResponseErrorMessages {

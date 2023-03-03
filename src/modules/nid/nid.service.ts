@@ -1,36 +1,60 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import {
-  LoggerLevel,
-  LoggerResponse,
-  NIDValidatorErrorMessages,
-} from 'src/entity';
+import { Injectable } from '@nestjs/common';
+import { LoggerLevel, LoggerResponse } from 'src/entity';
 import {
   APIResponse,
   IResponse,
 } from 'src/internal/api-response/api-response.service';
-import { APIException } from 'src/internal/exception/api.exception';
+import { ConfigurationRepository } from '../configuration/repository/configuration.repository';
 import { LoggerRepository } from '../logger/repository/logger.repository';
+import { NIDHelper } from './helper/nid.helper';
+// TODO: remove this mockResponse
+const mockResponse = {
+  name: 'AL AMIN SORKAR',
+  nameBn: 'আল আমিন সরকার',
+  dob: '2000-12-20',
+  nid: '1918277771',
+  fatherBn: 'হুমায়ুন মিয়াজী',
+  motherBn: 'মরিয়ম বেগম',
+};
 
 @Injectable()
 export class NIDService {
   constructor(
-    private readonly response: APIResponse,
+    private readonly apiResponse: APIResponse,
+    private configurationRepo: ConfigurationRepository,
     private loggerRepo: LoggerRepository,
   ) {}
 
   async uploadAndVerifyNID(
-    file: Express.Multer.File,
-    req: any,
+    files: Express.Multer.File[],
   ): Promise<IResponse<any>> {
-    if (req.fileExtensionValidationError || !file)
-      throw new APIException(
-        NIDValidatorErrorMessages.UNSUPPORTED_FILE,
-        'UNSUPPORTED_FILE',
-        HttpStatus.BAD_REQUEST,
+    // convert images to base64 string
+    const requestBody = {
+      data: {
+        front: Buffer.from((files as any).front[0].buffer).toString('base64'),
+        back: Buffer.from((files as any).back[0].buffer).toString('base64'),
+      },
+    };
+
+    //get ocrResponse and configure threshold values
+    const { ocrResponse, configurationThreshold } =
+      await NIDHelper.getOCRResponseAndConfigurationThreshold(
+        requestBody,
+        this.configurationRepo,
       );
 
-    //TODO: NID matching
-    return this.response.success({ message: 'success' });
+    // check string similarity
+    const matchingResponse = NIDHelper.compareNIDResponse(
+      ocrResponse.front,
+      mockResponse, // TODO: govt nid verification api call.
+    );
+
+    // match with the configuration threshold values
+    NIDHelper.compareConfigurationThresholdValues(
+      matchingResponse,
+      configurationThreshold,
+    );
+    return this.apiResponse.success(matchingResponse);
   }
 
   async getAllResults(
@@ -46,6 +70,6 @@ export class NIDService {
       offset,
       limit,
     );
-    return this.response.success(loggers || []);
+    return this.apiResponse.success(loggers || []);
   }
 }

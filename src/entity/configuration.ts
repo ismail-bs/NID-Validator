@@ -1,11 +1,8 @@
 export class ConfigurationThreshold {
+  name: number;
   nameBn: number;
-  nameEn: number;
-  photo: number;
-  signature: number;
-  fathersNameBn: number;
-  mothersNameBn: number;
-  dateOfBirth: number;
-  nidNumber: number;
-  address: number;
+  fatherBn: number;
+  motherBn: number;
+  dob: number;
+  nid: number;
 }
