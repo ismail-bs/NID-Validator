@@ -28,6 +28,7 @@ export class NIDService {
   async uploadAndVerifyNID(
     files: Express.Multer.File[],
   ): Promise<IResponse<any>> {
+    // TODO: remove all any response type.
     // convert images to base64 string
     const requestBody = {
       data: {

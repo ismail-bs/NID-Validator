@@ -1,4 +1,12 @@
-const { PORT, API, ENV, HOST, REST_API_PREFIX, BASE_URL } = process.env;
+const {
+  PORT,
+  API,
+  ENV,
+  HOST,
+  REST_API_PREFIX,
+  BASE_URL,
+  ML_MODEL_SERVER_BASE_URL,
+} = process.env;
 
 export const coreConfig = {
   port: parseInt(PORT) || 3001,
@@ -6,5 +14,6 @@ export const coreConfig = {
   env: ENV || 'DEVELOPMENT',
   host: HOST || 'localhost',
   restApiPrefix: REST_API_PREFIX || 'api',
-  baseUrl: BASE_URL || 'http://localhost:3001',
+  baseUrl: BASE_URL || 'http://127.0.0.1:3001',
+  mlServerBaseURL: ML_MODEL_SERVER_BASE_URL || 'http://127.0.0.1:5000',
 };

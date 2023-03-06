@@ -1,7 +1,9 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { coreConfig } from 'config/core';
 import { ConfigurationThreshold, NIDValidatorErrorMessages } from 'src/entity';
 import { APIException } from 'src/internal/exception/api.exception';
+import { ConfigurationRepository } from 'src/modules/configuration/repository/configuration.repository';
 
 @Injectable()
 export class NIDHelper {
@@ -60,6 +62,7 @@ export class NIDHelper {
     configurationThreshold: ConfigurationThreshold,
   ): void {
     for (const key in matchingResponseObj) {
+      // Check if the matching response key is less than the configuration threshold values.
       if (matchingResponseObj[key] < configurationThreshold[key]) {
         this.showErrorMessage(key);
       }
@@ -73,7 +76,7 @@ export class NIDHelper {
         back: string;
       };
     },
-    configurationRepo: any,
+    configurationRepo: ConfigurationRepository,
   ): Promise<{
     ocrResponse: any;
     configurationThreshold: ConfigurationThreshold;
@@ -81,7 +84,7 @@ export class NIDHelper {
     try {
       const [ocrResponse, configurationThreshold] = await Promise.all([
         // convert images to text format using the Python ML model
-        await axios.post('http://127.0.0.1:5000/ocr', requestBody),
+        await axios.post(`${coreConfig.mlServerBaseURL}/ocr`, requestBody),
 
         //get the configuration threshold
         await configurationRepo.getConfigurationThreshold(),

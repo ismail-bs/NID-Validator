@@ -48,7 +48,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-Open `http://localhost:3001/api` with your browser to see api live.
+Open `http://127.0.0.1:3001/api` with your browser to see api live.
 
 ### Connect to MongoDB
 
